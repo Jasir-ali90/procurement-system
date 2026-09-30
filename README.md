@@ -14,6 +14,7 @@
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![JWT Auth](https://img.shields.io/badge/Security-256--Bit%20JWT-FFA088?style=for-the-badge&logo=jsonwebtokens&logoColor=black)](https://jwt.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-CE86E4?style=for-the-badge)](LICENSE)
+[![Developed by Jasir Ali](https://img.shields.io/badge/Developed%20By-Jasir%20Ali-571C6B?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Jasir-ali90)
 
 <br/>
 
@@ -70,20 +71,20 @@ flowchart TD
     classDef process fill:#FAF2FC,stroke:#571C6B,stroke-width:1.5px,color:#2C0E36;
     classDef decision fill:#FFEFEA,stroke:#FF7E5F,stroke-width:2px,color:#2C0E36;
 
-    A([1. Department Requester Raises PR]):::startEnd --> B[2. Department Manager Review]:::process
-    B --> C{Within Approval Limit & Not Self?}:::decision
+    A["1. Department Requester Raises PR"]:::startEnd --> B["2. Department Manager Review"]:::process
+    B --> C{"Within Approval Limit & Not Self?"}:::decision
     C -- "Needs Edit / Rejected" --> A
-    C -- "Approved" --> D[3. Procurement Team Generates RFQ]:::process
-    D --> E[4. Log Vendor Bids & Quotes]:::process
-    E --> F[5. Side-by-Side Quotation Comparison]:::process
-    F --> G[6. Award Quote with Mandatory Justification]:::process
-    G --> H[7. Auto-Generate Purchase Order (PO)]:::startEnd
-    H --> I[8. Goods Delivery & Receipt Note (GRN)]:::process
-    I --> J{Strict Intake Matching}:::decision
-    J -- "Overage Attempt" --> K[Hard Backend Rejection 400]:::decision
-    J -- "Valid Intake" --> L[Update PO Status: Received / Partial]:::process
-    L --> M[9. Gated 5-Star Vendor Performance Rating]:::process
-    M --> N([10. Executive Spend Analytics & CSV Audit]):::startEnd
+    C -- "Approved" --> D["3. Procurement Team Generates RFQ"]:::process
+    D --> E["4. Log Vendor Bids & Quotes"]:::process
+    E --> F["5. Side-by-Side Quotation Comparison"]:::process
+    F --> G["6. Award Quote with Mandatory Justification"]:::process
+    G --> H["7. Auto-Generate Purchase Order (PO)"]:::startEnd
+    H --> I["8. Goods Delivery & Receipt Note (GRN)"]:::process
+    I --> J{"Strict Intake Matching"}:::decision
+    J -- "Overage Attempt" --> K["Hard Backend Rejection 400"]:::decision
+    J -- "Valid Intake" --> L["Update PO Status: Received / Partial"]:::process
+    L --> M["9. Gated 5-Star Vendor Performance Rating"]:::process
+    M --> N["10. Executive Spend Analytics & CSV Audit"]:::startEnd
 ```
 
 <br/>
@@ -368,10 +369,21 @@ procurement-system/
 
 ---
 
+## 👨‍💻 Developed By
+
 <div align="center">
 
-**Built with precision for enterprise procurement excellence.**
+### **Jasir Ali**
+*Full-Stack Software Engineer & Solutions Architect*
 
-*Questions or support? Open an issue or contact the project maintainers.*
+[![GitHub](https://img.shields.io/badge/GitHub-Jasir--ali90-571C6B?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Jasir-ali90)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-FF7E5F?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)
+[![Portfolio](https://img.shields.io/badge/Repository-Procurement%20System-2C0E36?style=for-the-badge&logo=git&logoColor=white)](https://github.com/Jasir-ali90/procurement-system)
+
+<br/>
+
+**Built with precision and high-assurance engineering for enterprise procurement excellence.**
+
+*© 2026 Jasir Ali. All rights reserved.*
 
 </div>
