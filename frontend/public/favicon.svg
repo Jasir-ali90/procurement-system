@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="favRibbon" x1="5" y1="58" x2="58" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#461756"/>
+      <stop offset="50%" stop-color="#8E237C"/>
+      <stop offset="100%" stop-color="#FF7E5F"/>
+    </linearGradient>
+    <linearGradient id="favArrow" x1="38" y1="26" x2="60" y2="5" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF7E5F"/>
+      <stop offset="100%" stop-color="#FFA088"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="16" fill="#2C0E36"/>
+
+  <path d="M 14 40 
+           C 9 33, 15 13, 31 11 
+           C 44 9, 46 24, 36 37 
+           C 26 50, 13 47, 18 37 
+           C 23 27, 36 30, 52 13" 
+        stroke="url(#favRibbon)" 
+        stroke-width="7" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none" />
+
+  <path d="M 46 8 L 59 7 L 57 20 Z" 
+        fill="url(#favArrow)" />
+</svg>

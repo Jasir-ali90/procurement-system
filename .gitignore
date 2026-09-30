@@ -1,0 +1,14 @@
+node_modules/
+.env
+*.env
+.env.*
+atlas-credentials.env
+*.log
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/data/
+frontend/dist/
+frontend/build/
+.DS_Store
+Thumbs.db
+

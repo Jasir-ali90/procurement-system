@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Jasir-ali90/procurement-system#readme",
+  "bugs": {
+    "url": "https://github.com/Jasir-ali90/procurement-system/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jasir-ali90/procurement-system.git"
+  },
+  "license": "ISC",
+  "author": "Jasir Ali",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.7.0",
+    "mongoose": "^9.10.2",
+    "multer": "^2.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

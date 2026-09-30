@@ -1,0 +1,1115 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "e-Procurement - Enterprise Procurement & Vendor Management API",
+		"description": "Comprehensive Postman Collection for the e-Procurement MERN Stack System. Includes authentication tokens, RBAC flows (Admin, Procurement Manager, Department User), business validation rules, and lifecycle operations.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Login - Admin User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"    console.log('Token saved to collection variable:', jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@local.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticates user and returns JWT bearer token + user profile with department & approval limit."
+					}
+				},
+				{
+					"name": "Login - Procurement Manager",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"procurement@local.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "Login - Department User (IT)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user.it@local.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Current Authenticated User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					}
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"password1234\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"change-password"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Users (Admin Only)",
+			"item": [
+				{
+					"name": "List Users (with search & filters)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users?role=Department User",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "Department User"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sarah Jenkins\",\n    \"email\": \"sarah.finance@local.com\",\n    \"password\": \"password123\",\n    \"role\": \"Department User\",\n    \"department\": null,\n    \"approvalLimit\": 15000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					}
+				},
+				{
+					"name": "Toggle User Status (Activate/Deactivate)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/:id/toggle-status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								":id",
+								"toggle-status"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "USER_ID_HERE"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Reset User Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newPassword\": \"temporaryPass123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/:id/reset-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								":id",
+								"reset-password"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "USER_ID_HERE"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Departments",
+			"item": [
+				{
+					"name": "List Departments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/departments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Department (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Research & Development\",\n    \"code\": \"RND\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/departments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Vendors",
+			"item": [
+				{
+					"name": "List Vendors (Search & Category filter)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/vendors?search=Tech&includeArchived=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"vendors"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Tech"
+								},
+								{
+									"key": "includeArchived",
+									"value": "false"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Register Vendor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"Apex Industrial Supplies LLC\",\n    \"contactPerson\": \"Elena Rostova\",\n    \"email\": \"orders@apexsupplies.com\",\n    \"phone\": \"+1 800 555 4910\",\n    \"address\": \"420 Commerce Way, Dallas TX\",\n    \"taxIdentificationNumber\": \"TIN-APEX-9012\",\n    \"paymentTerms\": \"Net 30\",\n    \"categories\": [\"Hardware\", \"Machinery\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/vendors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"vendors"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Vendor Scorecard Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/vendors/:id/scorecard",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"vendors",
+								":id",
+								"scorecard"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "VENDOR_ID_HERE"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Archive / Restore Vendor",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/vendors/:id/archive",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"vendors",
+								":id",
+								"archive"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "VENDOR_ID_HERE"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Purchase Requests (PR)",
+			"item": [
+				{
+					"name": "List Purchase Requests",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/purchase-requests",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchase-requests"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Multi-Item PR (Draft or Submitted)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\": \"IT Equipment\",\n    \"department\": \"DEPT_ID_HERE\",\n    \"urgency\": \"High\",\n    \"status\": \"Submitted\",\n    \"items\": [\n        {\n            \"itemDescription\": \"Apple MacBook Pro 16-inch M3 Max (36GB RAM, 1TB SSD)\",\n            \"quantity\": 2,\n            \"unitOfMeasure\": \"Units\",\n            \"estimatedUnitPrice\": 3499.00,\n            \"estimatedSubtotal\": 6998.00\n        },\n        {\n            \"itemDescription\": \"Dell UltraSharp 32-inch 4K USB-C Hub Monitor\",\n            \"quantity\": 2,\n            \"unitOfMeasure\": \"Units\",\n            \"estimatedUnitPrice\": 799.00,\n            \"estimatedSubtotal\": 1598.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/purchase-requests",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchase-requests"
+							]
+						}
+					}
+				},
+				{
+					"name": "Review PR (Approve / Return / Reject)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Approved\",\n    \"comments\": \"Verified budget availability. Proceed with vendor RFQ quotation sourcing.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/purchase-requests/:id/review",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchase-requests",
+								":id",
+								"review"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "PR_ID_HERE"
+								}
+							]
+						},
+						"description": "Enforces separation of duties (requester cannot approve own PR), financial approval limits, and mandatory justification for returned/rejected PRs."
+					}
+				}
+			]
+		},
+		{
+			"name": "6. RFQs & Bid Quotations",
+			"item": [
+				{
+					"name": "List RFQs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/rfqs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rfqs"
+							]
+						}
+					}
+				},
+				{
+					"name": "Create RFQ from Approved PR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"purchaseRequest\": \"APPROVED_PR_ID\",\n    \"closingDate\": \"2026-10-31T23:59:59.000Z\",\n    \"invitedVendors\": [\n        \"VENDOR_ID_1\",\n        \"VENDOR_ID_2\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rfqs"
+							]
+						}
+					}
+				},
+				{
+					"name": "Submit Quotation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vendorId\": \"VENDOR_ID_1\",\n    \"leadTimeDays\": 5,\n    \"paymentTerms\": \"Net 30\",\n    \"warrantyPeriod\": \"24 Months Manufacturer Warranty\",\n    \"notes\": \"Official enterprise distributor pricing.\",\n    \"items\": [\n        {\n            \"itemDescription\": \"Apple MacBook Pro 16-inch M3 Max (36GB RAM, 1TB SSD)\",\n            \"quantity\": 2,\n            \"unitPrice\": 3350.00\n        },\n        {\n            \"itemDescription\": \"Dell UltraSharp 32-inch 4K USB-C Hub Monitor\",\n            \"quantity\": 2,\n            \"unitPrice\": 750.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/:id/quotations",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rfqs",
+								":id",
+								"quotations"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "RFQ_ID_HERE"
+								}
+							]
+						},
+						"description": "Rejects submission if closing date has passed."
+					}
+				},
+				{
+					"name": "Side-by-Side Quotation Comparison",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/rfqs/:id/compare",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rfqs",
+								":id",
+								"compare"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "RFQ_ID_HERE"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Award Vendor RFQ",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vendorId\": \"VENDOR_ID_1\",\n    \"awardedReason\": \"Lowest compliant quotation with expedited 5-day delivery commitment.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rfqs/:id/award",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"rfqs",
+								":id",
+								"award"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "RFQ_ID_HERE"
+								}
+							]
+						},
+						"description": "Requires mandatory award reason for audit compliance. Automatically creates/prepares Purchase Order."
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Purchase Orders (PO)",
+			"item": [
+				{
+					"name": "List Purchase Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/purchase-orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchase-orders"
+							]
+						}
+					}
+				},
+				{
+					"name": "Generate PO from Awarded RFQ",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rfqId\": \"AWARDED_RFQ_ID\",\n    \"paymentTerms\": \"Net 30\",\n    \"taxRate\": 10,\n    \"shippingAddress\": \"Headquarters Dock B, 100 Technology Plaza, San Francisco, CA\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/purchase-orders/generate-from-rfq",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchase-orders",
+								"generate-from-rfq"
+							]
+						}
+					}
+				},
+				{
+					"name": "Revise Issued PO (Audit Snapshot Versioning)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shippingAddress\": \"West Coast Logistics Center, Dock 4, Oakland, CA\",\n    \"paymentTerms\": \"Net 45\",\n    \"taxRate\": 10,\n    \"revisionReason\": \"Client site relocated receiving facility to Oakland center.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/purchase-orders/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"purchase-orders",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "PO_ID_HERE"
+								}
+							]
+						},
+						"description": "Increments revisionNumber and creates an immutable snapshot in revisionHistory with mandatory reason."
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Goods Received Notes (GRN)",
+			"item": [
+				{
+					"name": "List Goods Received Notes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/goods-received",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goods-received"
+							]
+						}
+					}
+				},
+				{
+					"name": "Receive Goods against PO (Strict Non-Overage)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"purchaseOrder\": \"PO_ID_HERE\",\n    \"deliveryNoteNumber\": \"DN-99421-B\",\n    \"items\": [\n        {\n            \"itemDescription\": \"Apple MacBook Pro 16-inch M3 Max (36GB RAM, 1TB SSD)\",\n            \"quantityReceived\": 2,\n            \"quantityDamaged\": 0,\n            \"quantityRejected\": 0,\n            \"remarks\": \"Inspected hardware serials; brand new sealed condition.\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/goods-received",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goods-received"
+							]
+						},
+						"description": "Validates received quantity against remaining unreceived quantity. Rejects intake if overage detected. Automatically transitions PO status to Partially Received or Received."
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Vendor Performance Ratings",
+			"item": [
+				{
+					"name": "Get Eligible Orders Awaiting Evaluation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/analytics/eligible-pos-for-rating",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"eligible-pos-for-rating"
+							]
+						},
+						"description": "Returns POs with status 'Partially Received' or 'Received' that haven't been scored yet."
+					}
+				},
+				{
+					"name": "Submit Vendor Rating",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vendorId\": \"VENDOR_ID_HERE\",\n    \"purchaseOrderId\": \"PO_ID_HERE\",\n    \"timelinessScore\": 5,\n    \"qualityScore\": 5,\n    \"communicationScore\": 4,\n    \"issueNotes\": \"None. Delivered ahead of target milestone date.\",\n    \"resolutionNotes\": \"Highly recommended vendor for subsequent hardware bids.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/analytics/rate-vendor",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"rate-vendor"
+							]
+						},
+						"description": "Calculates overall score, updates vendor running average rating, and logs evaluation audit record."
+					}
+				},
+				{
+					"name": "Get Ratings History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/analytics/ratings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"ratings"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "10. Analytics & Reports",
+			"item": [
+				{
+					"name": "Get Dashboard KPIs & Top Vendors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/analytics/dashboard",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"dashboard"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Filtered Spend Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/analytics/reports?status=Received",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "Received"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Export Spend Report to CSV",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/analytics/reports/csv",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"reports",
+								"csv"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "11. Notifications",
+			"item": [
+				{
+					"name": "Get User Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					}
+				},
+				{
+					"name": "Mark All Notifications as Read",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/read-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notifications",
+								"read-all"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
