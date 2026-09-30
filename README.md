@@ -66,25 +66,21 @@ The application rejects generic corporate dashboard templates in favor of a cura
 ## 🚀 Key Modules & Procurement Lifecycle
 
 ```mermaid
-flowchart TD
-    classDef startEnd fill:#2C0E36,stroke:#FF7E5F,stroke-width:2px,color:#fff;
-    classDef process fill:#FAF2FC,stroke:#571C6B,stroke-width:1.5px,color:#2C0E36;
-    classDef decision fill:#FFEFEA,stroke:#FF7E5F,stroke-width:2px,color:#2C0E36;
-
-    A["1. Department Requester Raises PR"]:::startEnd --> B["2. Department Manager Review"]:::process
-    B --> C{"Within Approval Limit & Not Self?"}:::decision
-    C -- "Needs Edit / Rejected" --> A
-    C -- "Approved" --> D["3. Procurement Team Generates RFQ"]:::process
-    D --> E["4. Log Vendor Bids & Quotes"]:::process
-    E --> F["5. Side-by-Side Quotation Comparison"]:::process
-    F --> G["6. Award Quote with Mandatory Justification"]:::process
-    G --> H["7. Auto-Generate Purchase Order (PO)"]:::startEnd
-    H --> I["8. Goods Delivery & Receipt Note (GRN)"]:::process
-    I --> J{"Strict Intake Matching"}:::decision
-    J -- "Overage Attempt" --> K["Hard Backend Rejection 400"]:::decision
-    J -- "Valid Intake" --> L["Update PO Status: Received / Partial"]:::process
-    L --> M["9. Gated 5-Star Vendor Performance Rating"]:::process
-    M --> N["10. Executive Spend Analytics & CSV Audit"]:::startEnd
+graph TD
+    A["1. Department Requester Raises PR"] --> B["2. Department Manager Review"]
+    B --> C{"Within Approval Limit & Not Self?"}
+    C -->|"Needs Edit / Rejected"| A
+    C -->|"Approved"| D["3. Procurement Team Generates RFQ"]
+    D --> E["4. Log Vendor Bids & Quotes"]
+    E --> F["5. Side-by-Side Quotation Comparison"]
+    F --> G["6. Award Quote with Mandatory Justification"]
+    G --> H["7. Auto-Generate Purchase Order (PO)"]
+    H --> I["8. Goods Delivery & Receipt Note (GRN)"]
+    I --> J{"Strict 3-Way Matching & Non-Overage"}
+    J -->|"Overage Detected"| K["Hard Backend Rejection 400"]
+    J -->|"Valid Intake"| L["Update PO Status: Received / Partial"]
+    L --> M["9. Gated 5-Star Vendor Performance Rating"]
+    M --> N["10. Executive Spend Analytics & CSV Audit"]
 ```
 
 <br/>
